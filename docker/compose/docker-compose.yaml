@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: ../node
+      dockerfile: Dockerfile.prod
+    container_name: app
+    # entrypoint: dockerize --wait tcp://db:3306 --timeout 60s npm start dev
+    volumes:
+      - ../node/app:/var/app
+    tty: true
+    ports:
+      - "3000:3000"
+    networks:
+      - node-network
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql:9.0.1
+    command: --innodb_use_native_aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - node-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 1.5s
+      timeout: 3s
+      retries: 3
+networks:
+  node-network:
+    driver: bridge
