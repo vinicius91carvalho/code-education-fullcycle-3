@@ -1,0 +1,46 @@
+services:
+  nginx:
+    image: nginx:1.19.0
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - node-network
+  app:
+    build:
+      context: node
+      dockerfile: Dockerfile.prod
+    container_name: app
+    volumes:
+      - ./node/app:/var/app
+    tty: true
+    networks:
+      - node-network
+    entrypoint: ["/usr/local/bin/docker-entrypoint.sh"]
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mysql:9.0.1
+    command: --innodb_use_native_aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - node-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 3s
+      timeout: 3s
+      retries: 3
+networks:
+  node-network:
+    driver: bridge
