@@ -1,0 +1,12 @@
+FROM node:20
+
+WORKDIR /var/app
+
+COPY app /var/app/
+COPY docker-entrypoint.sh /usr/local/bin/
+
+RUN npm install
+
+EXPOSE 3000
+
+ENTRYPOINT ["npm", "start" ]
