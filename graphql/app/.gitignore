@@ -1,0 +1,7 @@
+# .gitignore for golang projects
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
