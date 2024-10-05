@@ -16,22 +16,29 @@ import (
 const defaultPort = "8080"
 
 func main() {
+	log.Print("Starting server...")
 	db, err := sql.Open("sqlite3", "./data.db")
 	if err != nil {
 		log.Fatalf("failed to open database: %v",err)
 	}
 	defer db.Close()
+	log.Print("Database connection established")
 
 	categoryDb := database.NewCategory(db)
+	courseDb := database.NewCourse(db)
+	log.Print("Database handler initialized")
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
+	log.Printf("Using port: %s", port)
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
 		CategoryDB: categoryDb,
+		CourseDB: courseDb,
 	}}))
+	log.Print("GraphQL server created")
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

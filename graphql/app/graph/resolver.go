@@ -8,4 +8,5 @@ import "github.com/vinicius91carvalho/code-education-graphql/internal/database"
 
 type Resolver struct{
 	CategoryDB *database.Category 
+	CourseDB *database.Course
 }
