@@ -1,0 +1,12 @@
+services:
+  golang:
+    container_name: golang-grpc
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/app
+    command: tail -f /dev/null
+    
