@@ -1,6 +1,6 @@
 services:
   golang:
-    container_name: golang
+    container_name: golang-graphql
     build:
       context: .
       dockerfile: Dockerfile
