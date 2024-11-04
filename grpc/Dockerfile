@@ -16,12 +16,14 @@ RUN tar -C /usr/local -xzf go1.23.2.linux-arm64.tar.gz
 RUN apt install -y protobuf-compiler
 
 # Set the PATH environment variable
-ENV PATH="/usr/local/go/bin:${PATH}"
+ENV PATH="$PATH:/usr/local/go/bin:/root/go/bin"
 
+# Protocol Buffers gen for Go
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
-ENV PATH="$PATH:$(go env GOPATH)/bin"
+# Evans (REPL for gRPC)
+RUN go install github.com/ktr0731/evans@latest
 
 # Verify Go installation
 RUN go version
