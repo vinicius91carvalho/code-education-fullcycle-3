@@ -1,0 +1,11 @@
+{
+    "service": {
+        "id": "nginx2",
+        "name": "nginx",
+        "tags": [
+            "web"
+        ],
+        "port": 80
+    },
+    "encrypt": "bNANQng7OJ1tLXQl0TllpJaT+MgUA9Akl6NZ4MQVlUg="
+}

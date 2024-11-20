@@ -1,0 +1,18 @@
+{
+    "service": {
+        "id": "nginx",
+        "name": "nginx",
+        "tags": [
+            "web"
+        ],
+        "port": 80,
+        "check": {
+            "id": "nginx",
+            "name": "HTTP 80",
+            "http": "http://localhost",
+            "interval": "10s",
+            "timeout": "1s"
+        }
+    },
+    "encrypt": "bNANQng7OJ1tLXQl0TllpJaT+MgUA9Akl6NZ4MQVlUg="
+}
